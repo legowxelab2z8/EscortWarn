@@ -1,10 +1,9 @@
 local addonName,addon = ...
 EscortQuestWarn = {}
-addon.frame = CreateFrame("Frame", addonName .. "Frame", UIParent)
 
 --Modeled after CONFIRM_ACCEPT_PVP_QUEST
-CONFIRM_ESCORT_QUEST = "Accepting this quest will start an event. Do you wish to accept?"
-ANNOUNCE_ESCORT_QUEST = "I am ready to start event quest: %s"
+CONFIRM_ESCORT_QUEST = "Accepting this quest will start an event.\nDo you wish to accept?"
+ANNOUNCE_ESCORT_QUEST = "<EW> I am ready to start event quest: %s"
 StaticPopupDialogs["CONFIRM_ESCORT_QUEST"] = {
 	text = CONFIRM_ESCORT_QUEST,
 	button1 = ACCEPT,
@@ -32,8 +31,6 @@ StaticPopupDialogs["CONFIRM_ESCORT_QUEST"] = {
 		QuestFrameDeclineButton:Enable();
 	end,
 	hideOnEscape = 1,
-	timeout = 0,
-	exclusive = 0,
 	whileDead = 1,
 }
 
@@ -45,25 +42,13 @@ function EscortQuestWarn.AcceptQuest(override)
 		return
 	end
 	local questID = GetQuestID()
-	if questID and addon.EventQuests[questID] then
-		--escort quest starting
-		--print("Attempting to start escort quest")
+	if questID and addon.EventQuests[questID] then--escort quest starting
 		QuestFrame.dialog = StaticPopup_Show("CONFIRM_ESCORT_QUEST");
 		return
 	else
-		--print("not escort quest")
 		original_AcceptQuest()
 		return
 	end
 end
-
--- Register events and call functions
-addon.frame:SetScript("OnEvent", function(self, event, ...)
-	addon.frame[event](self, ...)
-end)
-
-addon.frame:RegisterEvent('PLAYER_ENTERING_WORLD')
-function addon.frame:PLAYER_ENTERING_WORLD()
-	--Hook AcceptQuest
-	_G["AcceptQuest"] = EscortQuestWarn.AcceptQuest
-end
+--Hook AcceptQuest
+_G["AcceptQuest"] = EscortQuestWarn.AcceptQuest
