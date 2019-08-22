@@ -4,12 +4,17 @@ addon.frame = CreateFrame("Frame", addonName .. "Frame", UIParent)
 
 --Modeled after CONFIRM_ACCEPT_PVP_QUEST
 CONFIRM_ESCORT_QUEST = "Accepting this quest will start an event. Do you wish to accept?"
+ANNOUNCE_ESCORT_QUEST = "I am ready to start event quest: %s"
 StaticPopupDialogs["CONFIRM_ESCORT_QUEST"] = {
 	text = CONFIRM_ESCORT_QUEST,
 	button1 = ACCEPT,
 	button2 = CANCEL,
+	button3 = CHAT_ANNOUNCE,
 	OnAccept = function (self) AcceptQuest(true); end,
 	OnCancel = function (self) DeclineQuest(); end,
+	OnAlt = function ()
+		print(string.format(ANNOUNCE_ESCORT_QUEST,C_QuestLog.GetQuestInfo(GetQuestID()) or ""))
+	end,
 	OnShow = function()
 		QuestFrameAcceptButton:Disable();
 		QuestFrameDeclineButton:Disable();
