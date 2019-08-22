@@ -1,4 +1,4 @@
-addonName,addon = ...
+local addonName,addon = ...
 EscortQuestWarn = {}
 addon.frame = CreateFrame("Frame", addonName .. "Frame", UIParent)
 
@@ -59,12 +59,11 @@ end
 
 -- Register events and call functions
 addon.frame:SetScript("OnEvent", function(self, event, ...)
-	addonTable.frame[event](self, ...)
+	addon.frame[event](self, ...)
 end)
 
 addon.frame:RegisterEvent('PLAYER_ENTERING_WORLD')
 function addon.frame:PLAYER_ENTERING_WORLD()
-	--print("entering world")
 	--Hook AcceptQuest
 	_G["AcceptQuest"] = EscortQuestWarn.AcceptQuest
 end
