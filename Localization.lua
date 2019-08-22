@@ -7,6 +7,8 @@ CONFIRM_ESCORT_QUEST = "Accepting this quest will start an event.\nDo you wish t
 L["Enabled"] = VIDEO_OPTIONS_ENABLED or true
 L["Settings"] = CHAT_CONFIGURATION or true
 L["ANNOUNCE_ESCORT_QUEST"] = "EscortWarn - I am ready to start event quest: %s."
+L["Auto Announce"] = true
+L["Automatically announce to group members when you are about to start an event quest."] = true
 
 if locale == 'ruRU' then
 
