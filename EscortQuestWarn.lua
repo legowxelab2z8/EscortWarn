@@ -13,7 +13,15 @@ StaticPopupDialogs["CONFIRM_ESCORT_QUEST"] = {
 	OnAccept = function (self) AcceptQuest(true); end,
 	OnCancel = function (self) DeclineQuest(); end,
 	OnAlt = function ()
-		print(string.format(ANNOUNCE_ESCORT_QUEST,C_QuestLog.GetQuestInfo(GetQuestID()) or ""))
+		local channel
+		if IsInGroup() then channel="PARTY" end
+		if IsInRaid() then channel="RAID" end
+		if channel then
+			print(channel)
+			SendChatMessage(string.format(ANNOUNCE_ESCORT_QUEST,C_QuestLog.GetQuestInfo(GetQuestID()) or ""), channel)
+		else
+			print(string.format(ANNOUNCE_ESCORT_QUEST,C_QuestLog.GetQuestInfo(GetQuestID()) or ""))
+		end
 	end,
 	OnShow = function()
 		QuestFrameAcceptButton:Disable();
