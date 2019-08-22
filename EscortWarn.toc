@@ -6,5 +6,7 @@
 ## SavedVariables: EscortWarnData
 
 Data\EventQuests.lua
-EscortWarn.lua
+
+Localization.lua
 EscortWarnConfig.lua
+EscortWarn.lua

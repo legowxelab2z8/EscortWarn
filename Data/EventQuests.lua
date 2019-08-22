@@ -1,5 +1,5 @@
-local addonName,addonTable = ...
-addonTable.EventQuests = 
+local addonName,EscortWarn = ...
+EscortWarn.EventQuests = 
 {
 --DEBUG
 [25979] = true, -- Dealing with the Surge : Quest in Dun Morogh : Used for testing.

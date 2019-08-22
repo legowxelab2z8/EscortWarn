@@ -1,9 +1,8 @@
-local addonName,addon = ...
-EscortWarn = {}
-
+local addonName,EscortWarn = ...
+local L = EscortWarn.L
+local settings = EscortWarn.settings
 --Modeled after CONFIRM_ACCEPT_PVP_QUEST
-CONFIRM_ESCORT_QUEST = "Accepting this quest will start an event.\nDo you wish to accept?"
-ANNOUNCE_ESCORT_QUEST = "EscortWarn - I am ready to start event quest: %s"
+
 StaticPopupDialogs["CONFIRM_ESCORT_QUEST"] = {
 	text = CONFIRM_ESCORT_QUEST,
 	button1 = ACCEPT,
@@ -16,9 +15,9 @@ StaticPopupDialogs["CONFIRM_ESCORT_QUEST"] = {
 		if IsInGroup() then channel="PARTY" end
 		if IsInRaid() then channel="RAID" end
 		if channel then
-			SendChatMessage(string.format(ANNOUNCE_ESCORT_QUEST,C_QuestLog.GetQuestInfo(GetQuestID()) or ""), channel)
+			SendChatMessage(string.format(L["ANNOUNCE_ESCORT_QUEST"],C_QuestLog.GetQuestInfo(GetQuestID()) or ""), channel)
 		else
-			print(string.format(ANNOUNCE_ESCORT_QUEST,C_QuestLog.GetQuestInfo(GetQuestID()) or ""))
+			print(string.format(L["ANNOUNCE_ESCORT_QUEST"],C_QuestLog.GetQuestInfo(GetQuestID()) or ""))
 		end
 	end,
 	OnShow = function()
@@ -36,12 +35,13 @@ StaticPopupDialogs["CONFIRM_ESCORT_QUEST"] = {
 local original_AcceptQuest = AcceptQuest
 EscortWarn.original_AcceptQuest = original_AcceptQuest
 function EscortWarn.AcceptQuest(override)
+	if not settings.enabled then return original_AcceptQuest() end
 	if override == true then 
 		original_AcceptQuest()
 		return
 	end
 	local questID = GetQuestID()
-	if questID and addon.EventQuests[questID] then--escort quest starting
+	if questID and EscortWarn.EventQuests[questID] then--escort quest starting
 		QuestFrame.dialog = StaticPopup_Show("CONFIRM_ESCORT_QUEST");
 		return
 	else
@@ -49,5 +49,11 @@ function EscortWarn.AcceptQuest(override)
 		return
 	end
 end
---Hook AcceptQuest
+function EscortWarn:Hook()
 _G["AcceptQuest"] = EscortWarn.AcceptQuest
+end
+function EscortWarn:UnHook()
+_G["AcceptQuest"] = original_AcceptQuest
+end
+
+if settings.enabled then EscortWarn:Hook() end
