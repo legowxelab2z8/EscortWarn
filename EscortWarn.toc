@@ -1,10 +1,10 @@
 ## Interface: 11302
-## Title: EscortQuestWarn
+## Title: EscortWarn
 ## Version: v0.00
 ## Author: me
 ## Notes: Warns you when you are about to start an escort quest.
-## SavedVariables: EscortQuestWarnData
+## SavedVariables: EscortWarnData
 
 Data\EventQuests.lua
 
-EscortQuestWarn.lua
+EscortWarn.lua

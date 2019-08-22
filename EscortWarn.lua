@@ -1,9 +1,9 @@
 local addonName,addon = ...
-EscortQuestWarn = {}
+EscortWarn = {}
 
 --Modeled after CONFIRM_ACCEPT_PVP_QUEST
 CONFIRM_ESCORT_QUEST = "Accepting this quest will start an event.\nDo you wish to accept?"
-ANNOUNCE_ESCORT_QUEST = "<EW> I am ready to start event quest: %s"
+ANNOUNCE_ESCORT_QUEST = "EscortWarn - I am ready to start event quest: %s"
 StaticPopupDialogs["CONFIRM_ESCORT_QUEST"] = {
 	text = CONFIRM_ESCORT_QUEST,
 	button1 = ACCEPT,
@@ -16,7 +16,6 @@ StaticPopupDialogs["CONFIRM_ESCORT_QUEST"] = {
 		if IsInGroup() then channel="PARTY" end
 		if IsInRaid() then channel="RAID" end
 		if channel then
-			print(channel)
 			SendChatMessage(string.format(ANNOUNCE_ESCORT_QUEST,C_QuestLog.GetQuestInfo(GetQuestID()) or ""), channel)
 		else
 			print(string.format(ANNOUNCE_ESCORT_QUEST,C_QuestLog.GetQuestInfo(GetQuestID()) or ""))
@@ -35,8 +34,8 @@ StaticPopupDialogs["CONFIRM_ESCORT_QUEST"] = {
 }
 
 local original_AcceptQuest = AcceptQuest
-EscortQuestWarn.original_AcceptQuest = original_AcceptQuest
-function EscortQuestWarn.AcceptQuest(override)
+EscortWarn.original_AcceptQuest = original_AcceptQuest
+function EscortWarn.AcceptQuest(override)
 	if override == true then 
 		original_AcceptQuest()
 		return
@@ -51,4 +50,4 @@ function EscortQuestWarn.AcceptQuest(override)
 	end
 end
 --Hook AcceptQuest
-_G["AcceptQuest"] = EscortQuestWarn.AcceptQuest
+_G["AcceptQuest"] = EscortWarn.AcceptQuest
