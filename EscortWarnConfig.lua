@@ -99,3 +99,19 @@ function optionsPanel.default ()
 end
 
 InterfaceOptions_AddCategory(optionsPanel)
+
+--Slash Command
+function EscortWarn.onSlash(msg)
+	if msg:lower() == "report" then
+
+	elseif msg:lower() == "help" then
+
+	else
+		InterfaceOptionsFrame_OpenToCategory(optionsPanel)
+		InterfaceOptionsFrame_OpenToCategory(optionsPanel)
+	end
+end
+
+_G["SLASH_"..addonName.."1"] = '/escortwatch'
+_G["SLASH_"..addonName.."2"] = '/ew'
+SlashCmdList[addonName] = EscortWarn.onSlash
