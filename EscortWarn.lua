@@ -25,6 +25,13 @@ StaticPopupDialogs["CONFIRM_ESCORT_QUEST"] = {
 	whileDead = 1,
 }
 
+local function GetGroupOrRaid()
+	local channel
+	if IsInGroup() then channel="PARTY" end
+	if IsInRaid() then channel="RAID" end
+	return channel
+end
+
 local original_AcceptQuest = AcceptQuest
 EscortWarn.original_AcceptQuest = original_AcceptQuest
 function EscortWarn.AcceptQuest(override)
@@ -32,6 +39,7 @@ function EscortWarn.AcceptQuest(override)
 	if not EscortWarnData.settings.enabled then return original_AcceptQuest() end
 	if override == true then return original_AcceptQuest() end
 	if not hooked then print("shouldnt be hooked") return original_AcceptQuest() end --Shouldn't happen, but maybe
+	if not GetGroupOrRaid() and not EscortWarnData.settings.enabledWhileSolo then return original_AcceptQuest() end
 	
 	local questID = GetQuestID()
 	if questID and EscortWarn.EventQuests[questID] then--escort quest starting
@@ -47,13 +55,11 @@ function EscortWarn.AcceptQuest(override)
 end
 
 function EscortWarn:Announce()
-	local channel
-	if IsInGroup() then channel="PARTY" end
-	if IsInRaid() then channel="RAID" end
+	local channel = GetGroupOrRaid()
 	if channel then
-		SendChatMessage(string.format(L["ANNOUNCE_ESCORT_QUEST"],C_QuestLog.GetQuestInfo(GetQuestID()) or ""), channel)
+		SendChatMessage(string.format(L["ANNOUNCE_ESCORT_QUEST"],GetTitleText()), channel)
 	else
-		print(string.format(L["ANNOUNCE_ESCORT_QUEST"],C_QuestLog.GetQuestInfo(GetQuestID()) or "")) -- DEBUGGING DELETE ME
+		print(string.format(L["ANNOUNCE_ESCORT_QUEST"],GetTitleText())) -- DEBUGGING DELETE ME
 	end
 end
 

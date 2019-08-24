@@ -9,6 +9,8 @@ L["Settings"] = CHAT_CONFIGURATION or true
 L["ANNOUNCE_ESCORT_QUEST"] = "EscortWarn - I am ready to start event quest: %s."
 L["Auto Announce"] = true
 L["Automatically announce to group members when you are about to start an event quest."] = true
+L["Enabled While Solo"] = true
+L["Show the prompt when starting an event quest even when you are not in a group"] = true
 
 if locale == 'ruRU' then
 

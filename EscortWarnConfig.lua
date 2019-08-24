@@ -1,12 +1,11 @@
 local addonName,EscortWarn = ...
-
 local L = EscortWarn.L
 
 EscortWarn.dataLoaded = false
 
-
 local defaultSettings = {
 	enabled = true,
+	enabledWhileSolo = false,
 	autoAnnounce = true,
 }
 
@@ -32,7 +31,7 @@ function EscortWarn:OnEvent(event, ...)
 	end
 end
 
-EscortWarn.optionsPanel = CreateFrame( "Frame", addonName.."optionsPanel", UIParent)
+EscortWarn.optionsPanel = CreateFrame("Frame", addonName.."optionsPanel", UIParent)
 
 EscortWarn.optionsPanel:SetScript("OnEvent",EscortWarn.OnEvent)
 EscortWarn.optionsPanel:RegisterEvent("ADDON_LOADED")
@@ -43,27 +42,36 @@ local title = optionsPanel:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge
 title:SetPoint("TOPLEFT", 16, -16)
 title:SetText(addonName.. " " .. L["Settings"])
 
+
 --Checkbox, Enable
-local enableCheck = CreateFrame("CheckButton", nil, optionsPanel, "ChatConfigCheckButtonTemplate")
-enableCheck:SetPoint("TOPLEFT", title, "BOTTOMLEFT", 0, -16)
-local enableLabel = optionsPanel:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
-enableLabel:SetPoint("TOPLEFT", enableCheck, "TOPRIGHT", 4, -4)
-enableLabel:SetText(L["Enabled"])
+local enableCheck = CreateFrame("CheckButton", nil, optionsPanel, "InterfaceOptionsCheckButtonTemplate")
+local thisOption = enableCheck
+thisOption:SetPoint("TOPLEFT", title, "BOTTOMLEFT", 0, -16)
+thisOption.Text:SetText(L["Enabled"])
+local lastOption = thisOption
+
+--Checkbox, Enabled While Solo
+local enableWhileSolo = CreateFrame("CheckButton", nil, optionsPanel, "InterfaceOptionsCheckButtonTemplate")
+thisOption = enableWhileSolo
+thisOption:SetPoint("TOPLEFT", lastOption, "BOTTOMLEFT", 10, 0)
+thisOption.Text:SetText(L["Enabled While Solo"])
+thisOption.tooltipText = L["Show the prompt when starting an event quest even when you are not in a group"]
+lastOption = thisOption
 
 --Checkbox, Auto-Announce
-local announceCheck = CreateFrame("CheckButton", nil, enableCheck, "ChatConfigCheckButtonTemplate")
-announceCheck:SetPoint("TOPLEFT", enableCheck, "BOTTOMLEFT", 8, -4)
-announceCheck.tooltipText = L["Automatically announce to group members when you are about to start an event quest."]
-local announceLabel = optionsPanel:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
-announceLabel:SetPoint("TOPLEFT", announceCheck, "TOPRIGHT", 4, -4)
-announceLabel:SetText(L["Auto Announce"])
-announceLabel.tooltipText = L["Automatically announce to group members when you are about to start an event quest."]
---Checkbox, Only in group
+local announceCheck = CreateFrame("CheckButton", nil, enableCheck, "InterfaceOptionsCheckButtonTemplate")
+thisOption = announceCheck
+thisOption:SetPoint("TOPLEFT", lastOption, "BOTTOMLEFT", 0, 0)
+thisOption.tooltipText = L["Automatically announce to group members when you are about to start an event quest."]
+thisOption.Text:SetText(L["Auto Announce"])
+lastOption = thisOption
+
 
 function optionsPanel.refresh()
-	print("refresh") -- DEBUGGING DELETE ME
+	--print("refresh") -- DEBUGGING DELETE ME
 	if not EscortWarn.dataLoaded then return end
 	enableCheck:SetChecked(settings.enabled)
+	enableWhileSolo:SetChecked(settings.enabledWhileSolo)
 	announceCheck:SetChecked(settings.autoAnnounce)
 end
 
@@ -78,6 +86,7 @@ function optionsPanel.okay()
 	end
 
 	settings.enabled = enableCheck:GetChecked()
+	settings.enabledWhileSolo = enableWhileSolo:GetChecked()
 	settings.autoAnnounce = announceCheck:GetChecked()
 end
 
