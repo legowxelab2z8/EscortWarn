@@ -13,17 +13,17 @@ local defaultSettings = {
 local settings
 
 local function LoadDefaults()
-	print("Loading Defaults")
+	print("Loading Defaults") -- DEBUGGING DELETE ME
 	if not EscortWarnData then EscortWarnData = {} end
 	EscortWarnData.settings = CopyTable(defaultSettings)
+	settings = EscortWarnData.settings
 end
 
 function EscortWarn:OnEvent(event, ...)
 	if event == "ADDON_LOADED" then
 		if ... == addonName then
 			if not EscortWarnData or not EscortWarnData.settings then LoadDefaults() end
-			EscortWarn.settings = EscortWarnData.settings
-			settings = EscortWarn.settings
+			settings = EscortWarnData.settings
 
 			if settings.enabled then EscortWarn:Hook() end
 
@@ -33,8 +33,10 @@ function EscortWarn:OnEvent(event, ...)
 end
 
 EscortWarn.optionsPanel = CreateFrame( "Frame", addonName.."optionsPanel", UIParent)
+
 EscortWarn.optionsPanel:SetScript("OnEvent",EscortWarn.OnEvent)
 EscortWarn.optionsPanel:RegisterEvent("ADDON_LOADED")
+
 local optionsPanel = EscortWarn.optionsPanel
 optionsPanel.name = addonName
 local title = optionsPanel:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
@@ -59,14 +61,14 @@ announceLabel.tooltipText = L["Automatically announce to group members when you 
 --Checkbox, Only in group
 
 function optionsPanel.refresh()
-	print("refresh")
+	print("refresh") -- DEBUGGING DELETE ME
 	if not EscortWarn.dataLoaded then return end
 	enableCheck:SetChecked(settings.enabled)
 	announceCheck:SetChecked(settings.autoAnnounce)
 end
 
 function optionsPanel.okay()
-	--print("okay")
+	--print("okay")-- DEBUGGING DELETE ME
 	if settings.enabled ~= enableCheck:GetChecked() then
 		if enableCheck:GetChecked() then
 			EscortWarn:Hook()
@@ -77,16 +79,13 @@ function optionsPanel.okay()
 
 	settings.enabled = enableCheck:GetChecked()
 	settings.autoAnnounce = announceCheck:GetChecked()
-
-	--EscortWarnData.settings = CopyTable(settings)
 end
 
 function optionsPanel.cancel()
-	--print("cancel")
+	--print("cancel")-- DEBUGGING DELETE ME
 end
 
 function optionsPanel.default ()
-	--TODO: Fix this
 	LoadDefaults()
 end
 

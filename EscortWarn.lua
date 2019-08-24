@@ -1,7 +1,7 @@
 local addonName,EscortWarn = ...
 local L = EscortWarn.L
 local hooked = false
-ew = EscortWarn
+ew = EscortWarn -- DEBUGGING DELETE ME
 --Modeled after CONFIRM_ACCEPT_PVP_QUEST
 StaticPopupDialogs["CONFIRM_ESCORT_QUEST"] = {
 	text = CONFIRM_ESCORT_QUEST,
@@ -28,15 +28,15 @@ StaticPopupDialogs["CONFIRM_ESCORT_QUEST"] = {
 local original_AcceptQuest = AcceptQuest
 EscortWarn.original_AcceptQuest = original_AcceptQuest
 function EscortWarn.AcceptQuest(override)
-	if not EscortWarn.settings.enabled then print("EW is disabled") return original_AcceptQuest() end
-	if override == true then 
-		original_AcceptQuest()
-		return
-	end
+	if not EscortWarnData then return original_AcceptQuest() end
+	if not EscortWarnData.settings.enabled then return original_AcceptQuest() end
+	if override == true then return original_AcceptQuest() end
+	if not hooked then print("shouldnt be hooked") return original_AcceptQuest() end --Shouldn't happen, but maybe
+	
 	local questID = GetQuestID()
 	if questID and EscortWarn.EventQuests[questID] then--escort quest starting
 		QuestFrame.dialog = StaticPopup_Show("CONFIRM_ESCORT_QUEST");
-		if EscortWarn.settings.autoAnnounce then
+		if EscortWarnData.settings.autoAnnounce then
 			EscortWarn:Announce()
 		end
 		return
@@ -53,20 +53,20 @@ function EscortWarn:Announce()
 	if channel then
 		SendChatMessage(string.format(L["ANNOUNCE_ESCORT_QUEST"],C_QuestLog.GetQuestInfo(GetQuestID()) or ""), channel)
 	else
-		print(string.format(L["ANNOUNCE_ESCORT_QUEST"],C_QuestLog.GetQuestInfo(GetQuestID()) or ""))
+		print(string.format(L["ANNOUNCE_ESCORT_QUEST"],C_QuestLog.GetQuestInfo(GetQuestID()) or "")) -- DEBUGGING DELETE ME
 	end
 end
 
 function EscortWarn:Hook()
 	if not hooked then
-		print("hook")
+		print("hook") -- DEBUGGING DELETE ME
 		_G["AcceptQuest"] = EscortWarn.AcceptQuest
-		
+		hooked = true
 	end
 end
 function EscortWarn:UnHook()
 	if hooked then 
-		print("unhook")
+		print("unhook") -- DEBUGGING DELETE ME
 		_G["AcceptQuest"] = original_AcceptQuest
 		hooked = false
 	end
