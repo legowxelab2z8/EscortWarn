@@ -1,6 +1,6 @@
 ## Interface: 11302
 ## Title: EscortWarn
-## Version: v0.00
+## Version: v@project-version@
 ## Author: me
 ## Notes: Warns you when you are about to start an escort quest.
 ## SavedVariables: EscortWarnData

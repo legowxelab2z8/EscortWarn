@@ -1,9 +1,9 @@
 local addonName,EscortWarn = ...
 EscortWarn.EventQuests = 
 {
---DEBUG
+--@debug@
 [25979] = true, -- Dealing with the Surge : Quest in Dun Morogh : Used for testing.
---ENDDEBUG
+--@end-debug@
 [155] = true, --The Defias Brotherhood : Escort The Defias Traitor to discover where VanCleef is hiding : Escort the Defias Traitor to the secret hideout of the Defias Brotherhood.
 [219] = true, --Missing In Action : Escort Corporal Keeshan back to Redridge : Protect Corporal Keeshan on the journey back to Redridge.
 [309] = true, --Protecting the Shipment : Protect the Ironband Caravan : Ensure Miran and the shipment arrive at the excavation site, then inform Prospector Ironband.
