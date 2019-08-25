@@ -1,7 +1,7 @@
 local addonName,EscortWarn = ...
 local L = EscortWarn.L
 local hooked = false
-ew = EscortWarn -- DEBUGGING DELETE ME
+
 --Modeled after CONFIRM_ACCEPT_PVP_QUEST
 StaticPopupDialogs["CONFIRM_ESCORT_QUEST"] = {
 	text = CONFIRM_ESCORT_QUEST,
@@ -38,7 +38,7 @@ function EscortWarn.AcceptQuest(override)
 	if not EscortWarnData then return original_AcceptQuest() end
 	if not EscortWarnData.settings.enabled then return original_AcceptQuest() end
 	if override == true then return original_AcceptQuest() end
-	if not hooked then print("shouldnt be hooked") return original_AcceptQuest() end --Shouldn't happen, but maybe
+	if not hooked then return original_AcceptQuest() end
 	if not GetGroupOrRaid() and not EscortWarnData.settings.enabledWhileSolo then return original_AcceptQuest() end
 	
 	local questID = GetQuestID()
@@ -58,21 +58,17 @@ function EscortWarn:Announce()
 	local channel = GetGroupOrRaid()
 	if channel then
 		SendChatMessage(string.format(L["ANNOUNCE_ESCORT_QUEST"],GetTitleText()), channel)
-	else
-		print(string.format(L["ANNOUNCE_ESCORT_QUEST"],GetTitleText())) -- DEBUGGING DELETE ME
 	end
 end
 
 function EscortWarn:Hook()
 	if not hooked then
-		print("hook") -- DEBUGGING DELETE ME
 		_G["AcceptQuest"] = EscortWarn.AcceptQuest
 		hooked = true
 	end
 end
 function EscortWarn:UnHook()
 	if hooked then 
-		print("unhook") -- DEBUGGING DELETE ME
 		_G["AcceptQuest"] = original_AcceptQuest
 		hooked = false
 	end

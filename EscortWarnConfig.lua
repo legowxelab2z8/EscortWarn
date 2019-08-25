@@ -12,7 +12,6 @@ local defaultSettings = {
 local settings
 
 local function LoadDefaults()
-	print("Loading Defaults") -- DEBUGGING DELETE ME
 	if not EscortWarnData then EscortWarnData = {} end
 	EscortWarnData.settings = CopyTable(defaultSettings)
 	settings = EscortWarnData.settings
@@ -24,7 +23,7 @@ function EscortWarn:OnEvent(event, ...)
 			if not EscortWarnData or not EscortWarnData.settings then LoadDefaults() end
 			settings = EscortWarnData.settings
 
-			if settings.enabled then EscortWarn:Hook() end
+			if settings.enabled then EscortWarn:Hook() else EscortWarn:UnHook() end
 
 			EscortWarn.dataLoaded = true
 		end
@@ -62,13 +61,12 @@ lastOption = thisOption
 local announceCheck = CreateFrame("CheckButton", nil, enableCheck, "InterfaceOptionsCheckButtonTemplate")
 thisOption = announceCheck
 thisOption:SetPoint("TOPLEFT", lastOption, "BOTTOMLEFT", 0, 0)
-thisOption.tooltipText = L["Automatically announce to group members when you are about to start an event quest."]
 thisOption.Text:SetText(L["Auto Announce"])
+thisOption.tooltipText = L["Automatically announce to group members when you are about to start an event quest."]
 lastOption = thisOption
 
 
 function optionsPanel.refresh()
-	--print("refresh") -- DEBUGGING DELETE ME
 	if not EscortWarn.dataLoaded then return end
 	enableCheck:SetChecked(settings.enabled)
 	enableWhileSolo:SetChecked(settings.enabledWhileSolo)
@@ -76,7 +74,6 @@ function optionsPanel.refresh()
 end
 
 function optionsPanel.okay()
-	--print("okay")-- DEBUGGING DELETE ME
 	if settings.enabled ~= enableCheck:GetChecked() then
 		if enableCheck:GetChecked() then
 			EscortWarn:Hook()
@@ -91,7 +88,6 @@ function optionsPanel.okay()
 end
 
 function optionsPanel.cancel()
-	--print("cancel")-- DEBUGGING DELETE ME
 end
 
 function optionsPanel.default ()
