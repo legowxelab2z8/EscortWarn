@@ -34,6 +34,7 @@ end
 
 local original_AcceptQuest = AcceptQuest
 EscortWarn.original_AcceptQuest = original_AcceptQuest
+local acceptTime --Used for intercepting calls to hide quest panel this tick
 function EscortWarn.AcceptQuest(override)
 	if not EscortWarnData then return original_AcceptQuest() end
 	if not EscortWarnData.settings.enabled then return original_AcceptQuest() end
@@ -44,6 +45,7 @@ function EscortWarn.AcceptQuest(override)
 	local questID = GetQuestID()
 	if questID and EscortWarn.EventQuests[questID] then--escort quest starting
 		QuestFrame.dialog = StaticPopup_Show("CONFIRM_ESCORT_QUEST");
+		acceptTime = GetTime()
 		if EscortWarnData.settings.autoAnnounce then
 			EscortWarn:Announce()
 		end
@@ -52,6 +54,17 @@ function EscortWarn.AcceptQuest(override)
 		original_AcceptQuest()
 		return
 	end
+end
+
+--QuestFrame.Hide
+--Needed for addons like Leatrix_Plus that closes the QuestFrame after accepting a quest
+--Causes tainting. Shows error message INTERFACE_ACTION_BLOCKED, but quest functions still work
+local original_QuestFrameHide = QuestFrame.Hide
+function EscortWarn.QuestFrameHide(...)
+	if acceptTime == GetTime() then
+		return
+	end
+	return original_QuestFrameHide(...)
 end
 
 function EscortWarn:Announce()
@@ -64,12 +77,14 @@ end
 function EscortWarn:Hook()
 	if not hooked then
 		_G["AcceptQuest"] = EscortWarn.AcceptQuest
+		QuestFrame.Hide = EscortWarn.QuestFrameHide
 		hooked = true
 	end
 end
 function EscortWarn:UnHook()
 	if hooked then 
 		_G["AcceptQuest"] = original_AcceptQuest
+		QuestFrame.Hide = original_QuestFrameHide
 		hooked = false
 	end
 end
