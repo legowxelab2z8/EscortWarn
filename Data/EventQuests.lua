@@ -7,6 +7,7 @@ EscortWarn.EventQuests =
 [155] = true, --The Defias Brotherhood : Escort The Defias Traitor to discover where VanCleef is hiding : Escort the Defias Traitor to the secret hideout of the Defias Brotherhood.
 [219] = true, --Missing In Action : Escort Corporal Keeshan back to Redridge : Protect Corporal Keeshan on the journey back to Redridge.
 [309] = true, --Protecting the Shipment : Protect the Ironband Caravan : Ensure Miran and the shipment arrive at the excavation site, then inform Prospector Ironband.
+[434] = true, --The Attack! : Overhear Lescovar and Marzon's Conversation : Overhear Lescovar and Marzon's Conversation
 [435] = true, --Escorting Erland : Erland must reach Rane Yorick : Escort Erland through the wolves, to Rane Yorick.
 [648] = true, --Rescue OOX-17/TN! : Escort OOX-17/TN to safety : Escort OOX-17/TN to Steamwheedle Port, then report to Oglethorpe Obnoticus in Booty Bay.
 [660] = true, --Hints of a New Plague? : Protect Kinelory : Protect Kinelory until she returns to Quae. 
